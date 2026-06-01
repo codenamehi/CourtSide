@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Courtside — Claim Your Court</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:   #4ade80;
+    --green2:  #16a34a;
+    --dark:    #070c07;
+    --surface: #0e160e;
+    --card:    #131f13;
+    --border:  rgba(74,222,128,0.15);
+    --border2: rgba(74,222,128,0.08);
+    --text:    #e8f5e8;
+    --muted:   #6b8f6b;
+    --gold:    #f59e0b;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 60px;
+    background: rgba(7,12,7,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--green);
+    cursor: pointer;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+  }
+
+  .nav-tab {
+    padding: 7px 20px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { background: var(--green); color: var(--dark); font-weight: 600; }
+
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--green);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: rgba(74,222,128,0.08); }
+
+  /* ── PAGES ── */
+  .page { display: none; padding-top: 60px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ═══════════════════════════
+     HOME PAGE
+  ═══════════════════════════ */
+  .hero {
+    position: relative;
+    padding: 80px 32px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border2) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green);
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .hero h1 span { color: var(--green); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 440px;
+    margin: 20px auto 36px;
+    line-height: 1.6;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--dark);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { background: #86efac; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+  /* ── MAP SECTION ── */
+  .map-section {
+    padding: 0 32px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .map-wrap {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    height: 420px;
+  }
+
+  .map-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-overlay-top {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+  }
+
+  .map-sport-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    pointer-events: all;
+  }
+
+  .sport-pill {
+    background: rgba(7,12,7,0.85);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+  .sport-pill:hover, .sport-pill.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(74,222,128,0.1);
+  }
+
+  .map-stat {
+    background: rgba(7,12,7,0.85);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    backdrop-filter: blur(8px);
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+    pointer-events: none;
+  }
+
+  /* ── GYM POPUP ── */
+  .gym-popup {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    min-width: 200px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.2s;
+    z-index: 10;
+  }
+  .gym-popup.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .gym-popup-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .gym-popup-king { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .gym-popup-king span { font-size: 12px; color: var(--muted); }
+  .gym-popup-king strong { font-size: 12px; color: var(--gold); }
+  .gym-popup-btn {
+    width: 100%;
+    background: var(--green);
+    color: var(--dark);
+    border: none;
+    padding: 8px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── NEARBY PLAYERS ── */
+  .nearby-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px 60px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .player-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .player-card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .player-card:hover { border-color: var(--border); }
+
+  .p-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .p-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .p-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .p-challenge {
+    margin-left: auto;
+    background: var(--green);
+    color: var(--dark);
+    border: none;
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .p-challenge:hover { background: #86efac; }
+
+  /* ── SIDE LEADERBOARD ── */
+  .side-board {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    height: fit-content;
+  }
+
+  .side-board-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .side-board-title { font-size: 13px; font-weight: 600; color: var(--text); }
+  .side-board-gym { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .lb-row {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lb-row:last-child { border-bottom: none; }
+
+  .lb-num { font-size: 12px; color: var(--muted); width: 22px; font-family: 'DM Mono', monospace; }
+  .lb-num.top { color: var(--gold); }
+  .lb-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+  .lb-pts { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .king-tag {
+    background: rgba(245,158,11,0.15);
+    color: var(--gold);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* ═══════════════════════════
+     RANK / COMING SOON PAGE
+  ═══════════════════════════ */
+  .coming-soon {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cs-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 10%, rgba(74,222,128,0.06) 0%, transparent 70%),
+      repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(74,222,128,0.02) 2px, rgba(74,222,128,0.02) 4px
+      );
+    pointer-events: none;
+  }
+
+  .cs-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+
+  .cs-crown { font-size: 16px; animation: bob 2s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+  .cs-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 9vw, 110px);
+    line-height: 0.9;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .cs-title .line1 { color: var(--text); display: block; }
+  .cs-title .line2 { color: var(--green); display: block; }
+
+  .cs-desc {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 560px;
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 64px;
+  }
+
+  /* feature cards */
+  .cs-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 64px;
+  }
+
+  .cs-feature {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .cs-feature:hover { border-color: var(--border); }
+
+  .cs-feature::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .cs-feature:hover::before { opacity: 1; }
+
+  .cs-feature-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+  }
+
+  .cs-feature-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .cs-feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* how it works */
+  .cs-how {
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 64px;
+  }
+
+  .cs-how-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .cs-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .cs-steps::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .cs-step { text-align: center; padding: 0 12px; position: relative; }
+
+  .cs-step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--green);
+    margin: 0 auto 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cs-step-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .cs-step-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* notify form */
+  .cs-notify {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .cs-notify h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .cs-notify p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .notify-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .notify-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .notify-input:focus { border-color: var(--green); }
+  .notify-input::placeholder { color: var(--muted); }
+
+  .notify-btn {
+    background: var(--green);
+    color: var(--dark);
+    border: none;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .notify-btn:hover { background: #86efac; }
+
+  .notify-success {
+    display: none;
+    color: var(--green);
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 12px;
+  }
+
+  /* ── MOBILE NAV ── */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    .nav-cta { display: none; }
+    .nearby-section { grid-template-columns: 1fr; }
+    .cs-features { grid-template-columns: 1fr; }
+    .cs-steps { grid-template-columns: repeat(2, 1fr); }
+    .cs-steps::before { display: none; }
+    .hero { padding: 60px 16px 40px; }
+    .map-section, .nearby-section { padding-left: 16px; padding-right: 16px; }
+    .cs-how, .cs-features { max-width: 100%; }
+    .coming-soon { padding: 60px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">COURTSIDE</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home')">Play</button>
+    <button class="nav-tab" onclick="showPage('rank')">Rank Mode</button>
+  </div>
+  <button class="nav-cta" onclick="showPage('home')">Find a Match ⚡</button>
+</nav>
+
+<!-- ═══════════ HOME PAGE ═══════════ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-tag">1v1 · Find your court · Claim your throne</div>
+    <h1>CLAIM<br/><span>YOUR COURT</span></h1>
+    <p class="hero-sub">Challenge nearby players, take over gym courts, and become the undisputed king of your city.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="scrollToMap()">Find Nearby Gyms</button>
+      <button class="btn-ghost" onclick="showPage('rank')">What is Rank Mode? →</button>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-section" id="map-area">
+    <div class="map-wrap">
+      <canvas id="mapCanvas" class="map-canvas"></canvas>
+
+      <div class="map-overlay-top">
+        <div class="map-sport-pills">
+          <div class="sport-pill active" onclick="filterSport(this,'basketball')">🏀 Basketball</div>
+          <div class="sport-pill" onclick="filterSport(this,'tennis')">🎾 Tennis</div>
+          <div class="sport-pill" onclick="filterSport(this,'badminton')">🏸 Badminton</div>
+          <div class="sport-pill" onclick="filterSport(this,'tabletennis')">🏓 Table Tennis</div>
+        </div>
+        <div class="map-stat" id="gymCount">4 gyms nearby</div>
+      </div>
+
+      <!-- Gym popup -->
+      <div class="gym-popup" id="gymPopup">
+        <div class="gym-popup-name" id="popupName">Planet Fitness BGC</div>
+        <div class="gym-popup-king">
+          <span>👑 King:</span>
+          <strong id="popupKing">Sara R. — 2,810 pts</strong>
+        </div>
+        <button class="gym-popup-btn" onclick="alert('Sign up to challenge the king!')">Challenge King ⚡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEARBY + LEADERBOARD -->
+  <div class="nearby-section">
+    <div>
+      <div class="section-label">Challengers nearby</div>
+      <div class="player-list" id="playerList"></div>
+    </div>
+
+    <div>
+      <div class="section-label">King of the court</div>
+      <div class="side-board">
+        <div class="side-board-header">
+          <div>
+            <div class="side-board-title">🏀 Basketball</div>
+            <div class="side-board-gym">Planet Fitness BGC</div>
+          </div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-num top">👑</div>
+          <div class="lb-name">Sara R.</div>
+          <div class="king-tag">KING</div>
+          <div class="lb-pts">2,810</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-num">#2</div>
+          <div class="lb-name">Jake K.</div>
+          <div class="lb-pts">1,240</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-num">#3</div>
+          <div class="lb-name">Marco L.</div>
+          <div class="lb-pts">980</div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-num">#4</div>
+          <div class="lb-name">Pia S.</div>
+          <div class="lb-pts">740</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ RANK PAGE ═══════════ -->
+<div class="page" id="page-rank">
+  <div class="coming-soon">
+    <div class="cs-bg"></div>
+
+    <div class="cs-badge">
+      <span class="cs-crown">👑</span>
+      Coming Soon
+    </div>
+
+    <div class="cs-title">
+      <span class="line1">RANK</span>
+      <span class="line2">MODE</span>
+    </div>
+
+    <p class="cs-desc">
+      Rank Mode is the competitive league of Courtside — a structured, season-based ladder where every match counts toward your official rating. We're building it for the mobile app launching soon.
+    </p>
+
+    <!-- Features -->
+    <div class="cs-features">
+      <div class="cs-feature">
+        <div class="cs-feature-icon">⚔️</div>
+        <div class="cs-feature-title">Placement matches</div>
+        <div class="cs-feature-desc">Play 10 placement matches at the start of each season to earn your starting rank. No free placements — every game matters.</div>
+      </div>
+      <div class="cs-feature">
+        <div class="cs-feature-icon">📈</div>
+        <div class="cs-feature-title">ELO rating system</div>
+        <div class="cs-feature-desc">Beat a higher-ranked player and earn more. Lose to a lower-ranked player and fall harder. Your rating is a true measure of skill.</div>
+      </div>
+      <div class="cs-feature">
+        <div class="cs-feature-icon">🏅</div>
+        <div class="cs-feature-title">7 rank tiers</div>
+        <div class="cs-feature-desc">Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster. Each tier unlocks exclusive court privileges at partner gyms.</div>
+      </div>
+      <div class="cs-feature">
+        <div class="cs-feature-icon">🗺️</div>
+        <div class="cs-feature-title">Regional ladders</div>
+        <div class="cs-feature-desc">Compete in your city, your region, or go for the national leaderboard. Rank Mode is geo-aware — climb locally first.</div>
+      </div>
+      <div class="cs-feature">
+        <div class="cs-feature-icon">🛡️</div>
+        <div class="cs-feature-title">Gym territory defense</div>
+        <div class="cs-feature-desc">In Rank Mode, Kings must accept ranked challenges within 24 hours or automatically forfeit their crown. No hiding.</div>
+      </div>
+      <div class="cs-feature">
+        <div class="cs-feature-icon">🏆</div>
+        <div class="cs-feature-title">Season rewards</div>
+        <div class="cs-feature-desc">End-of-season trophies, profile badges, and exclusive gym perks for top finishers. Season 1 launches with the mobile app.</div>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="cs-how">
+      <div class="cs-how-title">How rank mode works</div>
+      <div class="cs-steps">
+        <div class="cs-step">
+          <div class="cs-step-num">1</div>
+          <div class="cs-step-label">Get placed</div>
+          <div class="cs-step-desc">Complete 10 placement matches at any partner gym</div>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">2</div>
+          <div class="cs-step-label">Climb the ladder</div>
+          <div class="cs-step-desc">Win ranked matches to gain ELO and move up tiers</div>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">3</div>
+          <div class="cs-step-label">Claim courts</div>
+          <div class="cs-step-desc">Challenge Kings at gyms — beat them to take the crown</div>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">4</div>
+          <div class="cs-step-label">End the season</div>
+          <div class="cs-step-desc">Top players earn rewards, badges, and gym privileges</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notify -->
+    <div class="cs-notify">
+      <h3>GET EARLY ACCESS</h3>
+      <p>Be the first to know when Rank Mode drops on mobile.</p>
+      <div class="notify-row">
+        <input class="notify-input" type="email" placeholder="your@email.com" id="notifyEmail"/>
+        <button class="notify-btn" onclick="submitNotify()">Notify me</button>
+      </div>
+      <div class="notify-success" id="notifySuccess">✓ You're on the list — we'll reach out soon!</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ── PAGE SWITCHING ──────────────────────────────────
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    if (name === 'home') tabs[0].classList.add('active');
+    if (name === 'rank') tabs[1].classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function scrollToMap() {
+    document.getElementById('map-area').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ── NOTIFY FORM ────────────────────────────────────
+  function submitNotify() {
+    const email = document.getElementById('notifyEmail').value;
+    if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+    document.getElementById('notifySuccess').style.display = 'block';
+    document.querySelector('.notify-row').style.opacity = '0.4';
+    document.querySelector('.notify-row').style.pointerEvents = 'none';
+  }
+
+  // ── SPORT FILTER ───────────────────────────────────
+  let activeSport = 'basketball';
+  function filterSport(el, sport) {
+    document.querySelectorAll('.sport-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    activeSport = sport;
+    drawMap();
+    renderPlayers();
+  }
+
+  // ── DUMMY DATA ─────────────────────────────────────
+  const gyms = [
+    { id:1, name:'Planet Fitness BGC',        x:0.25, y:0.30, sports:['basketball','tabletennis'], king:'Sara R.',  pts:2810 },
+    { id:2, name:'Anytime Fitness Makati',     x:0.62, y:0.22, sports:['tennis','badminton'],      king:'Jake K.',  pts:1240 },
+    { id:3, name:"Gold's Gym Ortigas",         x:0.72, y:0.65, sports:['basketball','squash'],     king:null,       pts:0    },
+    { id:4, name:'Snap Fitness Quezon City',   x:0.38, y:0.72, sports:['tabletennis','badminton'], king:'Pia S.',   pts:740  },
+    { id:5, name:'F45 Training BGC',           x:0.50, y:0.45, sports:['basketball','tennis'],     king:'Marco L.', pts:980  },
+  ];
+
+  const players = {
+    basketball:   [{name:'Jake K.',  pts:1240, dist:'0.3km', av:'#1d4ed8', ac:'#bfdbfe'},{name:'Sara R. 👑',pts:2810,dist:'0.6km',av:'#7c3aed',ac:'#ddd6fe'},{name:'Marco L.',pts:980,dist:'1.1km',av:'#065f46',ac:'#a7f3d0'}],
+    tennis:       [{name:'Lea V.',   pts:1080, dist:'0.4km', av:'#9a3412', ac:'#fed7aa'},{name:'Carlo M.', pts:870, dist:'0.9km', av:'#1e40af',ac:'#bfdbfe'}],
+    badminton:    [{name:'Nina T.',  pts:650,  dist:'0.5km', av:'#6d28d9', ac:'#ddd6fe'},{name:'Rex B.',   pts:440, dist:'1.2km', av:'#065f46',ac:'#a7f3d0'}],
+    tabletennis:  [{name:'Pia S.',   pts:740,  dist:'0.3km', av:'#b45309', ac:'#fde68a'},{name:'Javi R.',  pts:510, dist:'0.8km', av:'#1d4ed8',ac:'#bfdbfe'}],
+    squash:       [{name:'Dom C.',   pts:920,  dist:'0.7km', av:'#9a3412', ac:'#fed7aa'}],
+  };
+
+  // ── RENDER PLAYERS ─────────────────────────────────
+  function renderPlayers() {
+    const list = document.getElementById('playerList');
+    const ps = players[activeSport] || [];
+    list.innerHTML = ps.map(p => `
+      <div class="player-card">
+        <div class="p-avatar" style="background:${p.av};color:${p.ac}">
+          ${p.name.split(' ').map(n=>n[0]).join('').replace('👑','').trim().slice(0,2)}
+        </div>
+        <div>
+          <div class="p-name">${p.name}</div>
+          <div class="p-meta">${p.pts} pts · ${p.dist}</div>
+        </div>
+        <button class="p-challenge" onclick="alert('Challenge sent to ${p.name.replace('👑','').trim()}!')">Challenge ⚡</button>
+      </div>
+    `).join('');
+  }
+
+  // ── MAP CANVAS ─────────────────────────────────────
+  const canvas = document.getElementById('mapCanvas');
+  const ctx = canvas.getContext('2d');
+  let hoveredGym = null;
+
+  function resizeCanvas() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    drawMap();
+  }
+
+  function drawMap() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    // bg
+    ctx.fillStyle = '#0e160e';
+    ctx.fillRect(0,0,W,H);
+
+    // grid
+    ctx.strokeStyle = 'rgba(74,222,128,0.07)';
+    ctx.lineWidth = 1;
+    for (let x=0; x<W; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y=0; y<H; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // roads (fake)
+    ctx.strokeStyle = 'rgba(74,222,128,0.12)';
+    ctx.lineWidth = 6;
+    [[0.1,0.5,0.9,0.5],[0.5,0.1,0.5,0.9],[0.2,0.1,0.8,0.9],[0.0,0.3,1.0,0.7]].forEach(([x1,y1,x2,y2]) => {
+      ctx.beginPath(); ctx.moveTo(x1*W,y1*H); ctx.lineTo(x2*W,y2*H); ctx.stroke();
+    });
+
+    // player dot
+    const px = W*0.5, py = H*0.5;
+    [60,90,130].forEach(r => {
+      ctx.beginPath();
+      ctx.arc(px,py,r,0,Math.PI*2);
+      ctx.strokeStyle = 'rgba(74,222,128,0.06)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    ctx.beginPath(); ctx.arc(px,py,8,0,Math.PI*2);
+    ctx.fillStyle = '#4ade80'; ctx.fill();
+    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+
+    // gym pins
+    const filtered = gyms.filter(g => g.sports.includes(activeSport));
+    document.getElementById('gymCount').textContent = filtered.length + ' gyms nearby';
+
+    filtered.forEach(gym => {
+      const gx = gym.x * W, gy = gym.y * H;
+      const isHovered = hoveredGym && hoveredGym.id === gym.id;
+      const r = isHovered ? 18 : 14;
+
+      // glow
+      if (gym.king) {
+        ctx.beginPath(); ctx.arc(gx,gy,r+8,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(245,158,11,0.1)'; ctx.fill();
+      }
+
+      // pin circle
+      ctx.beginPath(); ctx.arc(gx,gy,r,0,Math.PI*2);
+      ctx.fillStyle = gym.king ? '#1d4ed8' : '#131f13';
+      ctx.strokeStyle = gym.king ? '#f59e0b' : 'rgba(74,222,128,0.5)';
+      ctx.lineWidth = 2; ctx.fill(); ctx.stroke();
+
+      // emoji
+      const emoji = activeSport === 'basketball' ? '🏀' : activeSport === 'tennis' ? '🎾' : activeSport === 'badminton' ? '🏸' : '🏓';
+      ctx.font = `${isHovered?14:10}px serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(emoji, gx, gy);
+
+      // crown
+      if (gym.king) {
+        ctx.font = '10px serif'; ctx.fillText('👑', gx+r-2, gy-r+2);
+      }
+    });
+  }
+
+  // ── MAP HOVER / CLICK ──────────────────────────────
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const W = canvas.width, H = canvas.height;
+    const filtered = gyms.filter(g => g.sports.includes(activeSport));
+    hoveredGym = filtered.find(g => {
+      const dx = g.x*W - mx, dy = g.y*H - my;
+      return Math.sqrt(dx*dx+dy*dy) < 22;
+    }) || null;
+    canvas.style.cursor = hoveredGym ? 'pointer' : 'default';
+    drawMap();
+  });
+
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const W = canvas.width, H = canvas.height;
+    const filtered = gyms.filter(g => g.sports.includes(activeSport));
+    const clicked = filtered.find(g => {
+      const dx = g.x*W - mx, dy = g.y*H - my;
+      return Math.sqrt(dx*dx+dy*dy) < 22;
+    });
+    if (clicked) showGymPopup(clicked, e.clientX, e.clientY);
+    else document.getElementById('gymPopup').classList.remove('visible');
+  });
+
+  function showGymPopup(gym, cx, cy) {
+    const popup = document.getElementById('gymPopup');
+    const mapRect = document.querySelector('.map-wrap').getBoundingClientRect();
+    document.getElementById('popupName').textContent = gym.name;
+    document.getElementById('popupKing').textContent = gym.king ? `${gym.king} — ${gym.pts.toLocaleString()} pts` : 'No king yet!';
+    let left = cx - mapRect.left + 12;
+    let top  = cy - mapRect.top  - 10;
+    if (left + 210 > mapRect.width)  left = cx - mapRect.left - 222;
+    if (top  + 120 > mapRect.height) top  = cy - mapRect.top  - 120;
+    popup.style.left = left + 'px';
+    popup.style.top  = top  + 'px';
+    popup.classList.add('visible');
+  }
+
+  // ── INIT ───────────────────────────────────────────
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('load',   () => { resizeCanvas(); renderPlayers(); });
+</script>
+</body>
+</html>
