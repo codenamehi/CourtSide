@@ -1,303 +1,410 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Hoodlympics — Rule Your Hood</title>
-<link rel="icon" type="image/jpeg" href="logo-icon.jpeg"/>
-<link rel="apple-touch-icon" href="logo-icon.jpeg"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+/* ── RESET & VARS ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --green:   #4ade80;
+  --gold:    #f59e0b;
+  --dark:    #060a06;
+  --surface: #0d140d;
+  --card:    #111a11;
+  --card2:   #152015;
+  --border:  rgba(74,222,128,0.15);
+  --border2: rgba(74,222,128,0.08);
+  --text:    #eaf5ea;
+  --muted:   #5a7a5a;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 9998;
+}
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo" onclick="showPage('home')">
-    <!-- Replace logo-wordmark.jpeg with your actual logo file in the same folder -->
-    <img src="logo-wordmark.jpeg" alt="Hoodlympics" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
-    <span class="nav-logo-text" style="display:none">HOODLYMPICS</span>
-  </div>
-  <div class="nav-links">
-    <button class="nav-link active" onclick="showPage('home')">Play</button>
-    <button class="nav-link" onclick="showPage('rank')">Rank Mode</button>
-    <button class="nav-link" onclick="showPage('about')">About</button>
-    <button class="nav-link" onclick="showPage('register')">Join</button>
-    <button class="nav-link" onclick="showPage('contact')">Contact</button>
-  </div>
-  <button class="nav-btn" onclick="showPage('register')">Join Waitlist ⚡</button>
-  <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger">☰</button>
-</nav>
+/* ── TYPOGRAPHY HELPERS ───────────────────────────── */
+.h-green { color: var(--green); display: block; }
+.h-white { color: #fff; display: block; }
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button onclick="showPage('home');closeMobileMenu()">Play</button>
-  <button onclick="showPage('rank');closeMobileMenu()">Rank Mode</button>
-  <button onclick="showPage('about');closeMobileMenu()">About</button>
-  <button onclick="showPage('register');closeMobileMenu()">Join Waitlist</button>
-  <button onclick="showPage('contact');closeMobileMenu()">Contact</button>
-</div>
+/* ── NAV ──────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 90px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(6,10,6,0.93);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border2);
+}
+.nav-logo { cursor: pointer; display: flex; align-items: center; }
+.nav-logo img { height: 80px; width: auto; object-fit: contain; max-width: 220px; }
+.nav-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; letter-spacing: 3px; color: var(--green);
+}
+.nav-links { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 4px; }
+.nav-link {
+  padding: 7px 16px; border-radius: 7px;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+  cursor: pointer; border: none; background: transparent;
+  color: var(--muted); transition: all 0.2s;
+  font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;
+}
+.nav-link:hover { color: var(--text); }
+.nav-link.active { background: var(--green); color: var(--dark); }
+.nav-btn {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--green); padding: 8px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.5px; transition: all 0.2s; text-transform: uppercase;
+}
+.nav-btn:hover { background: rgba(74,222,128,0.1); }
+.hamburger { display: none; background: none; border: 1px solid var(--border); color: var(--green); padding: 6px 12px; border-radius: 6px; font-size: 18px; cursor: pointer; }
 
-<!-- ═══ HOME ═══ -->
-<div class="page active" id="page-home">
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-glow"></div>
-    <div class="hero-tag">🏆 1v1 · Claim Your Hood · Rule Your Court</div>
-    <h1><span class="h-green">RULE YOUR</span><span class="h-white">HOOD</span></h1>
-    <p class="hero-sub">Challenge players in your neighborhood, take over local gym courts, and become the undisputed king or queen of your city.</p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="showPage('register')">Join the Waitlist ⚡</button>
-      <button class="btn-ghost" onclick="showPage('about')">How It Works →</button>
-    </div>
-  </div>
+/* MOBILE MENU */
+.mobile-menu {
+  display: none; position: fixed; top: 90px; left: 0; right: 0; z-index: 999;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  flex-direction: column; padding: 8px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu button {
+  padding: 14px 20px; background: none; border: none; color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700;
+  text-align: left; cursor: pointer; border-radius: 8px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.mobile-menu button:hover { background: var(--card); color: var(--green); }
 
-  <!-- GENDER + SPORT FILTERS -->
-  <div class="filters-wrap">
-    <div class="gender-tabs">
-      <button class="gender-tab active" onclick="switchGender(this,'boys')">👦 Boys</button>
-      <button class="gender-tab" onclick="switchGender(this,'girls')">👧 Girls</button>
-    </div>
-    <div class="sport-pills">
-      <button class="sport-pill active" onclick="filterSport(this,'basketball')">🏀 Basketball</button>
-      <button class="sport-pill" onclick="filterSport(this,'tennis')">🎾 Tennis</button>
-      <button class="sport-pill" onclick="filterSport(this,'badminton')">🏸 Badminton</button>
-      <button class="sport-pill" onclick="filterSport(this,'tabletennis')">🏓 Table Tennis</button>
-      <button class="sport-pill" onclick="filterSport(this,'pickleball')">🥒 Pickleball</button>
-    </div>
-  </div>
+/* ── PAGES ────────────────────────────────────────── */
+.page { display: none; padding-top: 90px; min-height: 100vh; }
+.page.active { display: block; }
 
-  <!-- MAP COMING SOON -->
-  <div class="section-wrap">
-    <div class="map-coming">
-      <div class="map-grid-bg"></div>
-      <div class="fake-pins">
-        <div class="fake-pin" style="top:20%;left:18%">🏀</div>
-        <div class="fake-pin" style="top:25%;right:22%">🎾</div>
-        <div class="fake-pin" style="bottom:28%;left:35%">🏸</div>
-        <div class="fake-pin" style="bottom:22%;right:28%">🏓</div>
-        <div class="fake-pin" style="top:52%;left:58%">🥒</div>
-      </div>
-      <div class="map-cs-content">
-        <div class="map-cs-icon">🗺️</div>
-        <h2 class="map-cs-title">LIVE MAP COMING SOON</h2>
-        <p class="map-cs-sub">Real-time gym map with live player locations and court challenges — arriving with the mobile app.</p>
-        <div class="map-cs-badge">📱 Available on Mobile · Season 1</div>
-      </div>
-    </div>
-  </div>
+/* ── SHARED ───────────────────────────────────────── */
+.section-wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 56px; }
+.section-label {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 14px;
+}
+.section-heading {
+  font-family: 'Bebas Neue', sans-serif; font-size: 48px;
+  letter-spacing: 3px; margin: 48px 0 6px; text-align: center;
+}
+.section-sub { font-size: 15px; color: var(--muted); text-align: center; margin-bottom: 24px; }
 
-  <!-- PLAYERS + LEADERBOARD -->
-  <div class="section-wrap main-grid">
-    <div>
-      <div class="section-label">Challengers nearby</div>
-      <div id="playerList"></div>
-    </div>
-    <div>
-      <div class="section-label">King of the court</div>
-      <div class="side-board">
-        <div class="side-header">
-          <div class="side-title" id="boardTitle">🏀 Basketball</div>
-          <div class="side-gym" id="boardGym">Boys · Planet Fitness BGC</div>
-        </div>
-        <div id="leaderboardRows"></div>
-      </div>
-    </div>
-  </div>
-</div>
+.btn-primary {
+  background: var(--green); color: var(--dark); border: none;
+  padding: 13px 28px; border-radius: 9px; font-size: 15px; font-weight: 800;
+  cursor: pointer; font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.8px; transition: all 0.2s; text-transform: uppercase;
+}
+.btn-primary:hover { background: #86efac; transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent; color: var(--text); border: 1px solid var(--border);
+  padding: 13px 28px; border-radius: 9px; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.5px; transition: all 0.2s; text-transform: uppercase;
+}
+.btn-ghost:hover { border-color: var(--green); color: var(--green); }
+.btn-full { width: 100%; padding: 16px; font-size: 17px; }
 
-<!-- ═══ RANK ═══ -->
-<div class="page" id="page-rank">
-  <div class="coming-soon-page">
-    <div class="cs-bg"></div>
-    <div class="cs-badge"><span class="cs-crown">👑</span> Coming Soon — Mobile App</div>
-    <h1 class="cs-title"><span class="h-white">RANK</span><span class="h-green">MODE</span></h1>
-    <p class="cs-desc">Rank Mode is the competitive league of Hoodlympics — a structured, season-based ladder where every 1v1 match counts toward your official rating. Launching with the mobile app.</p>
+/* ── HERO ─────────────────────────────────────────── */
+.hero, .page-hero {
+  position: relative; padding: 88px 24px 64px; text-align: center; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border2) 1px, transparent 1px), linear-gradient(90deg, var(--border2) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(74,222,128,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag, .about-tag {
+  display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 2px; color: var(--green); border: 1px solid var(--border);
+  padding: 5px 16px; border-radius: 20px; margin-bottom: 24px; text-transform: uppercase;
+}
+.hero h1, .page-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(68px, 11vw, 130px); line-height: 0.88; letter-spacing: 4px; margin-bottom: 10px;
+}
+.hero-sub {
+  font-size: 16px; font-weight: 400; color: var(--muted);
+  max-width: 460px; margin: 18px auto 32px; line-height: 1.65;
+}
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-    <div class="feat-grid">
-      <div class="feat-card"><div class="feat-icon">⚔️</div><h3>Placement Matches</h3><p>Play 10 placement matches at any partner gym to earn your starting rank. Every game matters from day one.</p></div>
-      <div class="feat-card"><div class="feat-icon">📈</div><h3>ELO Rating</h3><p>Beat higher-ranked players, earn more. Lose to lower-ranked ones, fall harder. Your rating is a true reflection of skill.</p></div>
-      <div class="feat-card"><div class="feat-icon">🏅</div><h3>7 Rank Tiers</h3><p>Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster. Each tier unlocks exclusive gym privileges.</p></div>
-      <div class="feat-card"><div class="feat-icon">🗺️</div><h3>Regional Ladders</h3><p>Compete in your city, your region, or go for the national leaderboard. Rank Mode is geo-aware.</p></div>
-      <div class="feat-card"><div class="feat-icon">🛡️</div><h3>Court Defense</h3><p>Kings must accept ranked challenges within 24 hours or automatically forfeit their crown. No hiding.</p></div>
-      <div class="feat-card"><div class="feat-icon">🏆</div><h3>Season Rewards</h3><p>End-of-season trophies, profile badges, and exclusive gym perks for top finishers each season.</p></div>
-    </div>
+/* ── FILTERS ──────────────────────────────────────── */
+.filters-wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 20px; display: flex; flex-direction: column; gap: 12px; }
+.gender-tabs { display: inline-flex; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 4px; gap: 4px; }
+.gender-tab {
+  padding: 8px 24px; border-radius: 7px; font-size: 14px; font-weight: 800;
+  letter-spacing: 0.5px; cursor: pointer; border: none; background: transparent;
+  color: var(--muted); transition: all 0.2s; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase;
+}
+.gender-tab.active { background: var(--green); color: var(--dark); }
+.gender-tab:hover:not(.active) { color: var(--text); }
+.sport-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.sport-pill {
+  padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border);
+  font-size: 13px; font-weight: 700; cursor: pointer; color: var(--muted);
+  transition: all 0.2s; font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.5px; text-transform: uppercase; background: transparent;
+}
+.sport-pill:hover { color: var(--text); border-color: rgba(74,222,128,0.3); }
+.sport-pill.active { background: rgba(74,222,128,0.12); border-color: var(--green); color: var(--green); }
 
-    <div class="how-steps-row">
-      <div class="how-step"><div class="step-num">1</div><div class="step-label">Get Placed</div><p>10 placement matches at any partner gym</p></div>
-      <div class="how-arrow">→</div>
-      <div class="how-step"><div class="step-num">2</div><div class="step-label">Climb</div><p>Win ranked matches to gain ELO and move up tiers</p></div>
-      <div class="how-arrow">→</div>
-      <div class="how-step"><div class="step-num">3</div><div class="step-label">Claim Courts</div><p>Beat the King to take the crown</p></div>
-      <div class="how-arrow">→</div>
-      <div class="how-step"><div class="step-num">4</div><div class="step-label">Season End</div><p>Earn rewards, badges, and gym privileges</p></div>
-    </div>
+/* ── MAP COMING SOON ──────────────────────────────── */
+.map-coming {
+  position: relative; background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; height: 340px;
+  display: flex; align-items: center; justify-content: center;
+}
+.map-grid-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border2) 1px, transparent 1px), linear-gradient(90deg, var(--border2) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.fake-pins { position: absolute; inset: 0; }
+.fake-pin {
+  position: absolute; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; opacity: 0.4;
+}
+.map-cs-content { position: relative; z-index: 2; text-align: center; }
+.map-cs-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.6; }
+.map-cs-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 3px; margin-bottom: 8px; }
+.map-cs-sub { font-size: 14px; color: var(--muted); max-width: 360px; margin: 0 auto; line-height: 1.5; }
+.map-cs-badge {
+  display: inline-block; margin-top: 14px;
+  background: rgba(74,222,128,0.1); border: 1px solid var(--border);
+  color: var(--green); padding: 6px 16px; border-radius: 20px;
+  font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px;
+}
 
-    <div class="notify-card">
-      <h3>GET EARLY ACCESS</h3>
-      <p>Be first to know when Rank Mode drops on mobile.</p>
-      <div class="notify-row">
-        <input class="form-input" type="email" placeholder="your@email.com" id="notifyEmail"/>
-        <button class="btn-primary" onclick="submitNotify()">Notify Me</button>
-      </div>
-      <div class="notify-success" id="notifySuccess">✓ You're on the list!</div>
-    </div>
-  </div>
-</div>
+/* ── MAIN GRID ────────────────────────────────────── */
+.main-grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
 
-<!-- ═══ ABOUT ═══ -->
-<div class="page" id="page-about">
-  <div class="page-hero">
-    <div class="hero-bg"></div>
-    <div class="about-tag">The Story</div>
-    <h1>WHAT IS<br/><span class="h-green">HOODLYMPICS?</span></h1>
-    <p class="hero-sub">We're turning every gym, court, and sports venue in your neighborhood into a battleground — giving local athletes a stage to prove they're the best.</p>
-  </div>
-  <div class="section-wrap">
-    <div class="feat-grid">
-      <div class="feat-card"><div class="feat-icon">📍</div><h3>Location-Based</h3><p>Like Pokémon Go but for real athletes. Partner gyms appear on your map as live arenas. The closer you are, the more you compete.</p></div>
-      <div class="feat-card"><div class="feat-icon">👑</div><h3>King of the Court</h3><p>Every gym has a King and Queen per sport. Win enough matches to claim the crown. Lose a challenge and it transfers.</p></div>
-      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Instant Challenges</h3><p>See who's near your gym right now. Send a challenge, pick a sport, confirm the venue — all from your phone.</p></div>
-    </div>
+/* ── PLAYER CARDS ─────────────────────────────────── */
+.player-list { display: flex; flex-direction: column; gap: 8px; }
+.player-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 12px;
+  padding: 13px 15px; display: flex; align-items: center; gap: 13px;
+  cursor: pointer; transition: border-color 0.2s;
+}
+.player-card:hover { border-color: var(--border); }
+.p-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; flex-shrink: 0;
+}
+.p-name { font-size: 15px; font-weight: 800; color: var(--text); }
+.p-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.p-challenge {
+  margin-left: auto; background: var(--green); color: var(--dark); border: none;
+  padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 800;
+  cursor: pointer; font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.5px; transition: all 0.2s; flex-shrink: 0; text-transform: uppercase;
+}
+.p-challenge:hover { background: #86efac; }
+.p-empty { color: var(--muted); font-size: 14px; padding: 20px 0; text-align: center; }
 
-    <h2 class="section-heading">HOW IT WORKS</h2>
-    <div class="how-grid">
-      <div class="how-card"><span class="how-num">1</span><div><h3>Create your profile</h3><p>Sign up, pick your sports, and set your location. Your profile tracks your record, ELO rating, and crown history.</p></div></div>
-      <div class="how-card"><span class="how-num">2</span><div><h3>Find a gym on the map</h3><p>Open the live map to see partner gyms near you. Each gym shows the current King or Queen per sport.</p></div></div>
-      <div class="how-card"><span class="how-num">3</span><div><h3>Challenge a player</h3><p>Tap any nearby player or the current King to send a challenge. Pick the sport, confirm the gym, and show up.</p></div></div>
-      <div class="how-card"><span class="how-num">4</span><div><h3>Submit your result</h3><p>After the match, both players confirm the score. Ratings update instantly. Win the crown and it's yours until someone takes it.</p></div></div>
-    </div>
+/* ── LEADERBOARD ──────────────────────────────────── */
+.side-board { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.side-header { padding: 13px 15px; border-bottom: 1px solid var(--border2); }
+.side-title { font-size: 15px; font-weight: 800; color: var(--text); }
+.side-gym { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.lb-row { padding: 11px 15px; border-bottom: 1px solid var(--border2); display: flex; align-items: center; gap: 10px; }
+.lb-row:last-child { border-bottom: none; }
+.lb-num { font-size: 12px; color: var(--muted); width: 22px; font-family: 'DM Mono', monospace; }
+.lb-num.top { color: var(--gold); }
+.lb-name { flex: 1; font-size: 13px; font-weight: 700; color: var(--text); }
+.king-tag { background: rgba(245,158,11,0.15); color: var(--gold); font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-family: 'DM Mono', monospace; }
+.lb-pts { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
 
-    <h2 class="section-heading">THE SPORTS</h2>
-    <p class="section-sub">1v1 formats launching with Season 1</p>
-    <div class="sports-grid">
-      <div class="sport-card"><div class="sport-emoji">🏀</div><div class="sport-name">Basketball</div></div>
-      <div class="sport-card"><div class="sport-emoji">🎾</div><div class="sport-name">Tennis</div></div>
-      <div class="sport-card"><div class="sport-emoji">🏸</div><div class="sport-name">Badminton</div></div>
-      <div class="sport-card"><div class="sport-emoji">🏓</div><div class="sport-name">Table Tennis</div></div>
-      <div class="sport-card"><div class="sport-emoji">🥒</div><div class="sport-name">Pickleball</div></div>
-    </div>
-  </div>
-</div>
+/* ── RANK / COMING SOON ───────────────────────────── */
+.coming-soon-page {
+  min-height: calc(100vh - 90px);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 72px 24px 60px; position: relative; overflow: hidden;
+}
+.cs-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 10%, rgba(74,222,128,0.05) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(74,222,128,0.015) 3px, rgba(74,222,128,0.015) 4px);
+  pointer-events: none;
+}
+.cs-badge {
+  display: inline-flex; align-items: center; gap: 8px; position: relative;
+  background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);
+  color: var(--gold); padding: 6px 16px; border-radius: 20px;
+  font-size: 12px; font-weight: 700; font-family: 'DM Mono', monospace;
+  letter-spacing: 1px; margin-bottom: 24px; text-transform: uppercase;
+}
+.cs-crown { animation: bob 2s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.cs-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px,10vw,120px);
+  line-height: 0.88; letter-spacing: 4px; text-align: center; margin-bottom: 18px; position: relative;
+}
+.cs-desc { font-size: 16px; font-weight: 400; color: var(--muted); max-width: 540px; text-align: center; line-height: 1.7; margin-bottom: 52px; position: relative; }
 
-<!-- ═══ REGISTER ═══ -->
-<div class="page" id="page-register">
-  <div class="form-page-wrap">
-    <div class="form-page-header">
-      <h1>JOIN THE<br/><span class="h-green">WAITLIST</span></h1>
-      <p>Be among the first players when Hoodlympics launches in your city. Early sign-ups get priority placement and Season 1 founder badges.</p>
-    </div>
-    <div class="form-card" id="regForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input class="form-input" type="text" placeholder="Juan" id="regFirst"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input class="form-input" type="text" placeholder="Dela Cruz" id="regLast"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" placeholder="juan@email.com" id="regEmail"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">City / Area</label>
-        <input class="form-input" type="text" placeholder="Quezon City, BGC, Makati..." id="regCity"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">I am playing as</label>
-        <div class="gender-choice">
-          <div class="gender-opt selected" id="gopt-male" onclick="selectGender('male')">👦 Male</div>
-          <div class="gender-opt" id="gopt-female" onclick="selectGender('female')">👧 Female</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Sports I play</label>
-        <div class="sports-check">
-          <div class="sport-chk" onclick="toggleSport(this)">🏀 Basketball</div>
-          <div class="sport-chk" onclick="toggleSport(this)">🎾 Tennis</div>
-          <div class="sport-chk" onclick="toggleSport(this)">🏸 Badminton</div>
-          <div class="sport-chk" onclick="toggleSport(this)">🏓 Table Tennis</div>
-          <div class="sport-chk" onclick="toggleSport(this)">🥒 Pickleball</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Skill Level</label>
-        <select class="form-input form-select" id="regSkill">
-          <option value="" disabled selected>Select your level...</option>
-          <option>Beginner — just getting started</option>
-          <option>Intermediate — play regularly</option>
-          <option>Advanced — compete seriously</option>
-          <option>Pro / Semi-pro</option>
-        </select>
-      </div>
-      <button class="btn-primary btn-full" onclick="submitReg()">Claim My Spot 👑</button>
-    </div>
-    <div class="form-success" id="regSuccess">
-      <div class="success-icon">👑</div>
-      <h2>YOU'RE IN!</h2>
-      <p>Welcome to Hoodlympics. You'll be among the first to know when we launch in your city. Get ready to claim your court.</p>
-    </div>
-  </div>
-</div>
+/* ── FEAT GRID ────────────────────────────────────── */
+.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; width: 100%; max-width: 900px; margin-bottom: 52px; position: relative; }
+.feat-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 13px;
+  padding: 22px 18px; transition: border-color 0.2s; position: relative; overflow: hidden;
+}
+.feat-card:hover { border-color: var(--border); }
+.feat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.feat-card:hover::before { opacity: 1; }
+.feat-icon { font-size: 26px; margin-bottom: 10px; }
+.feat-card h3 { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.feat-card p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 400; }
 
-<!-- ═══ CONTACT ═══ -->
-<div class="page" id="page-contact">
-  <div class="form-page-wrap">
-    <div class="form-page-header">
-      <h1>GET IN<br/><span class="h-green">TOUCH</span></h1>
-      <p>Whether you're a gym partner, sponsor, player, or just curious — we want to hear from you.</p>
-    </div>
-    <div class="contact-cards">
-      <div class="contact-info-card"><div class="feat-icon">🏋️</div><h3>Gym Partners</h3><p>Want your gym on the Hoodlympics map? Reach out about our partner program.</p></div>
-      <div class="contact-info-card"><div class="feat-icon">🤝</div><h3>Sponsors</h3><p>Interested in reaching a competitive, active sports audience? Let's talk.</p></div>
-    </div>
-    <div class="form-card" id="contactForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Name</label>
-          <input class="form-input" type="text" placeholder="Your name" id="ctName"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input class="form-input" type="email" placeholder="your@email.com" id="ctEmail"/>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">I am a...</label>
-        <select class="form-input form-select" id="ctType">
-          <option value="" disabled selected>Select...</option>
-          <option>Player / Athlete</option>
-          <option>Gym Owner / Manager</option>
-          <option>Sponsor / Brand</option>
-          <option>Press / Media</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-input" rows="5" placeholder="Tell us what's on your mind..." id="ctMessage" style="resize:vertical;"></textarea>
-      </div>
-      <button class="btn-primary btn-full" onclick="submitContact()">Send Message ⚡</button>
-    </div>
-    <div class="form-success" id="contactSuccess">
-      <div class="success-icon">✅</div>
-      <h2>MESSAGE SENT!</h2>
-      <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
-    </div>
-  </div>
-</div>
+/* ── HOW STEPS ROW ────────────────────────────────── */
+.how-steps-row {
+  display: flex; align-items: flex-start; gap: 0; max-width: 860px;
+  width: 100%; margin-bottom: 52px; position: relative;
+}
+.how-step { flex: 1; text-align: center; padding: 0 10px; }
+.step-num {
+  width: 46px; height: 46px; border-radius: 50%; background: var(--card);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--green);
+  margin: 0 auto 10px;
+}
+.step-label { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.how-step p { font-size: 12px; color: var(--muted); line-height: 1.5; font-weight: 400; }
+.how-arrow { color: var(--muted); font-size: 20px; padding-top: 12px; flex-shrink: 0; }
 
-<!-- FOOTER -->
-<footer>
-  <img src="logo-wordmark.jpeg" alt="Hoodlympics" class="footer-logo" onerror="this.style.display='none'"/>
-  <p>© 2025 Hoodlympics · Rule Your Hood · All rights reserved</p>
-</footer>
+/* ── NOTIFY CARD ──────────────────────────────────── */
+.notify-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 28px 32px; max-width: 480px; width: 100%; text-align: center; position: relative;
+}
+.notify-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; margin-bottom: 6px; }
+.notify-card p { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-weight: 400; }
+.notify-row { display: flex; gap: 8px; }
+.notify-success { display: none; color: var(--green); font-size: 14px; font-weight: 600; margin-top: 10px; }
 
-<script src="app.js"></script>
-</body>
-</html>
+/* ── ABOUT HOW GRID ───────────────────────────────── */
+.how-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 13px; margin-bottom: 40px; }
+.how-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 13px;
+  padding: 22px 18px; display: flex; gap: 16px; align-items: flex-start; transition: border-color 0.2s;
+}
+.how-card:hover { border-color: var(--border); }
+.how-num { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--green); line-height: 1; flex-shrink: 0; width: 38px; }
+.how-card h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.how-card p { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 400; }
+
+/* ── SPORTS GRID ──────────────────────────────────── */
+.sports-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.sport-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 11px;
+  padding: 18px 10px; text-align: center; transition: border-color 0.2s;
+}
+.sport-card:hover { border-color: var(--green); }
+.sport-emoji { font-size: 26px; margin-bottom: 8px; }
+.sport-name { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── FORMS ────────────────────────────────────────── */
+.form-page-wrap { max-width: 620px; margin: 0 auto; padding: 72px 24px 60px; }
+.form-page-header { text-align: center; margin-bottom: 40px; }
+.form-page-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 8vw, 88px); line-height: 0.9; letter-spacing: 4px; margin-bottom: 12px;
+}
+.form-page-header p { font-size: 15px; color: var(--muted); line-height: 1.65; font-weight: 400; }
+.form-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+.form-input {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 11px 13px; font-size: 15px; color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif; outline: none;
+  transition: border-color 0.2s; width: 100%; letter-spacing: 0.3px;
+}
+.form-input:focus { border-color: var(--green); }
+.form-input::placeholder { color: var(--muted); }
+.form-select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7a5a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center;
+}
+.form-select option { background: var(--card); }
+.gender-choice { display: flex; gap: 10px; }
+.gender-opt {
+  flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 11px; text-align: center; cursor: pointer; transition: all 0.2s;
+  font-size: 15px; font-weight: 800; color: var(--muted); text-transform: uppercase;
+}
+.gender-opt:hover { border-color: var(--green); }
+.gender-opt.selected { background: rgba(74,222,128,0.12); border-color: var(--green); color: var(--green); }
+.sports-check { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sport-chk {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; cursor: pointer; transition: all 0.2s;
+  font-size: 13px; font-weight: 700; color: var(--muted); text-align: center;
+}
+.sport-chk:hover { border-color: var(--green); }
+.sport-chk.checked { background: rgba(74,222,128,0.1); border-color: var(--green); color: var(--green); }
+.form-success { display: none; text-align: center; padding: 48px 20px; }
+.success-icon { font-size: 52px; margin-bottom: 14px; }
+.form-success h2 { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 3px; color: var(--green); margin-bottom: 10px; }
+.form-success p { font-size: 15px; color: var(--muted); line-height: 1.65; font-weight: 400; }
+
+/* ── CONTACT ──────────────────────────────────────── */
+.contact-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; margin-bottom: 24px; }
+.contact-info-card {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 13px;
+  padding: 22px 18px; text-align: center; transition: border-color 0.2s;
+}
+.contact-info-card:hover { border-color: var(--border); }
+.contact-info-card h3 { font-size: 16px; font-weight: 800; color: var(--text); margin: 8px 0 6px; }
+.contact-info-card p { font-size: 13px; color: var(--muted); line-height: 1.55; font-weight: 400; }
+
+/* ── FOOTER ───────────────────────────────────────── */
+footer { background: var(--card); border-top: 1px solid var(--border2); padding: 28px 24px; text-align: center; }
+.footer-logo { height: 30px; margin-bottom: 10px; opacity: 0.75; }
+footer p { font-size: 13px; color: var(--muted); font-weight: 400; }
+
+/* ── RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 860px) {
+  .nav-links, .nav-btn { display: none; }
+  .hamburger { display: block; }
+  .main-grid { grid-template-columns: 1fr; }
+  .feat-grid { grid-template-columns: 1fr 1fr; }
+  .how-steps-row { flex-wrap: wrap; justify-content: center; }
+  .how-arrow { display: none; }
+  .how-step { flex: 0 0 45%; }
+  .sports-grid { grid-template-columns: repeat(3, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-cards { grid-template-columns: 1fr; }
+  .sports-check { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .feat-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
+  .sports-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero h1, .page-hero h1 { font-size: 64px; }
+}
