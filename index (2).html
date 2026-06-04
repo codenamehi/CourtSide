@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hoodlympics — Rule Your Hood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <!-- Replace logo-wordmark.jpeg with your actual logo file in the same folder -->
+    <img src="logo-wordmark.jpeg" alt="Hoodlympics" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span class="nav-logo-text" style="display:none">HOODLYMPICS</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('home')">Play</button>
+    <button class="nav-link" onclick="showPage('rank')">Rank Mode</button>
+    <button class="nav-link" onclick="showPage('about')">About</button>
+    <button class="nav-link" onclick="showPage('register')">Join</button>
+    <button class="nav-link" onclick="showPage('contact')">Contact</button>
+  </div>
+  <button class="nav-btn" onclick="showPage('register')">Join Waitlist ⚡</button>
+  <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger">☰</button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button onclick="showPage('home');closeMobileMenu()">Play</button>
+  <button onclick="showPage('rank');closeMobileMenu()">Rank Mode</button>
+  <button onclick="showPage('about');closeMobileMenu()">About</button>
+  <button onclick="showPage('register');closeMobileMenu()">Join Waitlist</button>
+  <button onclick="showPage('contact');closeMobileMenu()">Contact</button>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-tag">🏆 1v1 · Claim Your Hood · Rule Your Court</div>
+    <h1><span class="h-green">RULE YOUR</span><span class="h-white">HOOD</span></h1>
+    <p class="hero-sub">Challenge players in your neighborhood, take over local gym courts, and become the undisputed king or queen of your city.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('register')">Join the Waitlist ⚡</button>
+      <button class="btn-ghost" onclick="showPage('about')">How It Works →</button>
+    </div>
+  </div>
+
+  <!-- GENDER + SPORT FILTERS -->
+  <div class="filters-wrap">
+    <div class="gender-tabs">
+      <button class="gender-tab active" onclick="switchGender(this,'boys')">👦 Boys</button>
+      <button class="gender-tab" onclick="switchGender(this,'girls')">👧 Girls</button>
+    </div>
+    <div class="sport-pills">
+      <button class="sport-pill active" onclick="filterSport(this,'basketball')">🏀 Basketball</button>
+      <button class="sport-pill" onclick="filterSport(this,'tennis')">🎾 Tennis</button>
+      <button class="sport-pill" onclick="filterSport(this,'badminton')">🏸 Badminton</button>
+      <button class="sport-pill" onclick="filterSport(this,'tabletennis')">🏓 Table Tennis</button>
+      <button class="sport-pill" onclick="filterSport(this,'pickleball')">🥒 Pickleball</button>
+    </div>
+  </div>
+
+  <!-- MAP COMING SOON -->
+  <div class="section-wrap">
+    <div class="map-coming">
+      <div class="map-grid-bg"></div>
+      <div class="fake-pins">
+        <div class="fake-pin" style="top:20%;left:18%">🏀</div>
+        <div class="fake-pin" style="top:25%;right:22%">🎾</div>
+        <div class="fake-pin" style="bottom:28%;left:35%">🏸</div>
+        <div class="fake-pin" style="bottom:22%;right:28%">🏓</div>
+        <div class="fake-pin" style="top:52%;left:58%">🥒</div>
+      </div>
+      <div class="map-cs-content">
+        <div class="map-cs-icon">🗺️</div>
+        <h2 class="map-cs-title">LIVE MAP COMING SOON</h2>
+        <p class="map-cs-sub">Real-time gym map with live player locations and court challenges — arriving with the mobile app.</p>
+        <div class="map-cs-badge">📱 Available on Mobile · Season 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYERS + LEADERBOARD -->
+  <div class="section-wrap main-grid">
+    <div>
+      <div class="section-label">Challengers nearby</div>
+      <div id="playerList"></div>
+    </div>
+    <div>
+      <div class="section-label">King of the court</div>
+      <div class="side-board">
+        <div class="side-header">
+          <div class="side-title" id="boardTitle">🏀 Basketball</div>
+          <div class="side-gym" id="boardGym">Boys · Planet Fitness BGC</div>
+        </div>
+        <div id="leaderboardRows"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RANK ═══ -->
+<div class="page" id="page-rank">
+  <div class="coming-soon-page">
+    <div class="cs-bg"></div>
+    <div class="cs-badge"><span class="cs-crown">👑</span> Coming Soon — Mobile App</div>
+    <h1 class="cs-title"><span class="h-white">RANK</span><span class="h-green">MODE</span></h1>
+    <p class="cs-desc">Rank Mode is the competitive league of Hoodlympics — a structured, season-based ladder where every 1v1 match counts toward your official rating. Launching with the mobile app.</p>
+
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">⚔️</div><h3>Placement Matches</h3><p>Play 10 placement matches at any partner gym to earn your starting rank. Every game matters from day one.</p></div>
+      <div class="feat-card"><div class="feat-icon">📈</div><h3>ELO Rating</h3><p>Beat higher-ranked players, earn more. Lose to lower-ranked ones, fall harder. Your rating is a true reflection of skill.</p></div>
+      <div class="feat-card"><div class="feat-icon">🏅</div><h3>7 Rank Tiers</h3><p>Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster. Each tier unlocks exclusive gym privileges.</p></div>
+      <div class="feat-card"><div class="feat-icon">🗺️</div><h3>Regional Ladders</h3><p>Compete in your city, your region, or go for the national leaderboard. Rank Mode is geo-aware.</p></div>
+      <div class="feat-card"><div class="feat-icon">🛡️</div><h3>Court Defense</h3><p>Kings must accept ranked challenges within 24 hours or automatically forfeit their crown. No hiding.</p></div>
+      <div class="feat-card"><div class="feat-icon">🏆</div><h3>Season Rewards</h3><p>End-of-season trophies, profile badges, and exclusive gym perks for top finishers each season.</p></div>
+    </div>
+
+    <div class="how-steps-row">
+      <div class="how-step"><div class="step-num">1</div><div class="step-label">Get Placed</div><p>10 placement matches at any partner gym</p></div>
+      <div class="how-arrow">→</div>
+      <div class="how-step"><div class="step-num">2</div><div class="step-label">Climb</div><p>Win ranked matches to gain ELO and move up tiers</p></div>
+      <div class="how-arrow">→</div>
+      <div class="how-step"><div class="step-num">3</div><div class="step-label">Claim Courts</div><p>Beat the King to take the crown</p></div>
+      <div class="how-arrow">→</div>
+      <div class="how-step"><div class="step-num">4</div><div class="step-label">Season End</div><p>Earn rewards, badges, and gym privileges</p></div>
+    </div>
+
+    <div class="notify-card">
+      <h3>GET EARLY ACCESS</h3>
+      <p>Be first to know when Rank Mode drops on mobile.</p>
+      <div class="notify-row">
+        <input class="form-input" type="email" placeholder="your@email.com" id="notifyEmail"/>
+        <button class="btn-primary" onclick="submitNotify()">Notify Me</button>
+      </div>
+      <div class="notify-success" id="notifySuccess">✓ You're on the list!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="page-about">
+  <div class="page-hero">
+    <div class="hero-bg"></div>
+    <div class="about-tag">The Story</div>
+    <h1>WHAT IS<br/><span class="h-green">HOODLYMPICS?</span></h1>
+    <p class="hero-sub">We're turning every gym, court, and sports venue in your neighborhood into a battleground — giving local athletes a stage to prove they're the best.</p>
+  </div>
+  <div class="section-wrap">
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">📍</div><h3>Location-Based</h3><p>Like Pokémon Go but for real athletes. Partner gyms appear on your map as live arenas. The closer you are, the more you compete.</p></div>
+      <div class="feat-card"><div class="feat-icon">👑</div><h3>King of the Court</h3><p>Every gym has a King and Queen per sport. Win enough matches to claim the crown. Lose a challenge and it transfers.</p></div>
+      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Instant Challenges</h3><p>See who's near your gym right now. Send a challenge, pick a sport, confirm the venue — all from your phone.</p></div>
+    </div>
+
+    <h2 class="section-heading">HOW IT WORKS</h2>
+    <div class="how-grid">
+      <div class="how-card"><span class="how-num">1</span><div><h3>Create your profile</h3><p>Sign up, pick your sports, and set your location. Your profile tracks your record, ELO rating, and crown history.</p></div></div>
+      <div class="how-card"><span class="how-num">2</span><div><h3>Find a gym on the map</h3><p>Open the live map to see partner gyms near you. Each gym shows the current King or Queen per sport.</p></div></div>
+      <div class="how-card"><span class="how-num">3</span><div><h3>Challenge a player</h3><p>Tap any nearby player or the current King to send a challenge. Pick the sport, confirm the gym, and show up.</p></div></div>
+      <div class="how-card"><span class="how-num">4</span><div><h3>Submit your result</h3><p>After the match, both players confirm the score. Ratings update instantly. Win the crown and it's yours until someone takes it.</p></div></div>
+    </div>
+
+    <h2 class="section-heading">THE SPORTS</h2>
+    <p class="section-sub">1v1 formats launching with Season 1</p>
+    <div class="sports-grid">
+      <div class="sport-card"><div class="sport-emoji">🏀</div><div class="sport-name">Basketball</div></div>
+      <div class="sport-card"><div class="sport-emoji">🎾</div><div class="sport-name">Tennis</div></div>
+      <div class="sport-card"><div class="sport-emoji">🏸</div><div class="sport-name">Badminton</div></div>
+      <div class="sport-card"><div class="sport-emoji">🏓</div><div class="sport-name">Table Tennis</div></div>
+      <div class="sport-card"><div class="sport-emoji">🥒</div><div class="sport-name">Pickleball</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REGISTER ═══ -->
+<div class="page" id="page-register">
+  <div class="form-page-wrap">
+    <div class="form-page-header">
+      <h1>JOIN THE<br/><span class="h-green">WAITLIST</span></h1>
+      <p>Be among the first players when Hoodlympics launches in your city. Early sign-ups get priority placement and Season 1 founder badges.</p>
+    </div>
+    <div class="form-card" id="regForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="Juan" id="regFirst"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Dela Cruz" id="regLast"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="juan@email.com" id="regEmail"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">City / Area</label>
+        <input class="form-input" type="text" placeholder="Quezon City, BGC, Makati..." id="regCity"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">I am playing as</label>
+        <div class="gender-choice">
+          <div class="gender-opt selected" id="gopt-male" onclick="selectGender('male')">👦 Male</div>
+          <div class="gender-opt" id="gopt-female" onclick="selectGender('female')">👧 Female</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sports I play</label>
+        <div class="sports-check">
+          <div class="sport-chk" onclick="toggleSport(this)">🏀 Basketball</div>
+          <div class="sport-chk" onclick="toggleSport(this)">🎾 Tennis</div>
+          <div class="sport-chk" onclick="toggleSport(this)">🏸 Badminton</div>
+          <div class="sport-chk" onclick="toggleSport(this)">🏓 Table Tennis</div>
+          <div class="sport-chk" onclick="toggleSport(this)">🥒 Pickleball</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Skill Level</label>
+        <select class="form-input form-select" id="regSkill">
+          <option value="" disabled selected>Select your level...</option>
+          <option>Beginner — just getting started</option>
+          <option>Intermediate — play regularly</option>
+          <option>Advanced — compete seriously</option>
+          <option>Pro / Semi-pro</option>
+        </select>
+      </div>
+      <button class="btn-primary btn-full" onclick="submitReg()">Claim My Spot 👑</button>
+    </div>
+    <div class="form-success" id="regSuccess">
+      <div class="success-icon">👑</div>
+      <h2>YOU'RE IN!</h2>
+      <p>Welcome to Hoodlympics. You'll be among the first to know when we launch in your city. Get ready to claim your court.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="page" id="page-contact">
+  <div class="form-page-wrap">
+    <div class="form-page-header">
+      <h1>GET IN<br/><span class="h-green">TOUCH</span></h1>
+      <p>Whether you're a gym partner, sponsor, player, or just curious — we want to hear from you.</p>
+    </div>
+    <div class="contact-cards">
+      <div class="contact-info-card"><div class="feat-icon">🏋️</div><h3>Gym Partners</h3><p>Want your gym on the Hoodlympics map? Reach out about our partner program.</p></div>
+      <div class="contact-info-card"><div class="feat-icon">🤝</div><h3>Sponsors</h3><p>Interested in reaching a competitive, active sports audience? Let's talk.</p></div>
+    </div>
+    <div class="form-card" id="contactForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input class="form-input" type="text" placeholder="Your name" id="ctName"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" placeholder="your@email.com" id="ctEmail"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">I am a...</label>
+        <select class="form-input form-select" id="ctType">
+          <option value="" disabled selected>Select...</option>
+          <option>Player / Athlete</option>
+          <option>Gym Owner / Manager</option>
+          <option>Sponsor / Brand</option>
+          <option>Press / Media</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input" rows="5" placeholder="Tell us what's on your mind..." id="ctMessage" style="resize:vertical;"></textarea>
+      </div>
+      <button class="btn-primary btn-full" onclick="submitContact()">Send Message ⚡</button>
+    </div>
+    <div class="form-success" id="contactSuccess">
+      <div class="success-icon">✅</div>
+      <h2>MESSAGE SENT!</h2>
+      <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo-wordmark.jpeg" alt="Hoodlympics" class="footer-logo" onerror="this.style.display='none'"/>
+  <p>© 2025 Hoodlympics · Rule Your Hood · All rights reserved</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
