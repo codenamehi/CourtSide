@@ -39,7 +39,7 @@ function showPage(name) {
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   const pageEl = document.getElementById('page-' + name);
   if (pageEl) pageEl.classList.add('active');
-  const map = { home:0, rank:1, about:2, register:3, contact:4 };
+  const map = { home:0, rank:1, about:2, signup:3, contact:4 };
   const links = document.querySelectorAll('.nav-link');
   if (links[map[name]]) links[map[name]].classList.add('active');
   window.scrollTo(0, 0);
@@ -123,7 +123,12 @@ function submitNotify() {
   document.querySelector('.notify-row').style.pointerEvents = 'none';
 }
 
-// ── REGISTER FORM ──────────────────────────────────────
+// ── AVAILABILITY TOGGLE ────────────────────────────────
+function toggleAvail(el) {
+  el.classList.toggle('checked');
+}
+
+// ── SIGNUP FORM ────────────────────────────────────────
 let selectedGenderOpt = 'male';
 
 function selectGender(g) {
@@ -136,15 +141,16 @@ function toggleSport(el) {
   el.classList.toggle('checked');
 }
 
-function submitReg() {
-  const first = document.getElementById('regFirst').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  if (!first || !email || !email.includes('@')) {
-    alert('Please fill in at least your name and email.');
+function submitSignup() {
+  const first = document.getElementById('suFirst').value.trim();
+  const email = document.getElementById('suEmail').value.trim();
+  const phone = document.getElementById('suPhone').value.trim();
+  if (!first || !email || !email.includes('@') || !phone) {
+    alert('Please fill in your name, email, and phone number.');
     return;
   }
-  document.getElementById('regForm').style.display = 'none';
-  document.getElementById('regSuccess').style.display = 'block';
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('signupSuccess').style.display = 'block';
 }
 
 // ── CONTACT FORM ───────────────────────────────────────
