@@ -1,29 +1,29 @@
 // ── DATA ──────────────────────────────────────────────
 const DATA = {
   boys: {
-    basketball:   [{ n:'Jake K.',   pts:1240, dist:'0.3km', av:'#1d4ed8', ac:'#bfdbfe' },
-                   { n:'Marco L.',  pts:980,  dist:'1.1km', av:'#065f46', ac:'#a7f3d0' },
-                   { n:'Dom C.',    pts:760,  dist:'1.4km', av:'#7c3aed', ac:'#ddd6fe' }],
-    tennis:       [{ n:'Carlo M.',  pts:1080, dist:'0.4km', av:'#9a3412', ac:'#fed7aa' },
-                   { n:'Rex B.',    pts:870,  dist:'0.9km', av:'#1e40af', ac:'#bfdbfe' }],
-    badminton:    [{ n:'Rex B.',    pts:650,  dist:'0.5km', av:'#6d28d9', ac:'#ddd6fe' },
-                   { n:'Javi R.',   pts:440,  dist:'1.2km', av:'#065f46', ac:'#a7f3d0' }],
-    tabletennis:  [{ n:'Javi R.',   pts:740,  dist:'0.3km', av:'#b45309', ac:'#fde68a' },
-                   { n:'Marco L.',  pts:510,  dist:'0.8km', av:'#1d4ed8', ac:'#bfdbfe' }],
-    pickleball:   [{ n:'Dom C.',    pts:920,  dist:'0.7km', av:'#9a3412', ac:'#fed7aa' },
-                   { n:'Jake K.',   pts:680,  dist:'1.0km', av:'#065f46', ac:'#a7f3d0' }],
+    basketball:   [{ n:'Liam T.',   pts:1240, dist:'0.3km', av:'#1d4ed8', ac:'#bfdbfe' },
+                   { n:'Marcus W.', pts:980,  dist:'1.1km', av:'#065f46', ac:'#a7f3d0' },
+                   { n:'Jake O.',   pts:760,  dist:'1.4km', av:'#7c3aed', ac:'#ddd6fe' }],
+    tennis:       [{ n:'Connor B.', pts:1080, dist:'0.4km', av:'#9a3412', ac:'#fed7aa' },
+                   { n:'Riley M.',  pts:870,  dist:'0.9km', av:'#1e40af', ac:'#bfdbfe' }],
+    badminton:    [{ n:'Ethan H.',  pts:650,  dist:'0.5km', av:'#6d28d9', ac:'#ddd6fe' },
+                   { n:'Noah P.',   pts:440,  dist:'1.2km', av:'#065f46', ac:'#a7f3d0' }],
+    tabletennis:  [{ n:'Dylan K.',  pts:740,  dist:'0.3km', av:'#b45309', ac:'#fde68a' },
+                   { n:'Mason R.',  pts:510,  dist:'0.8km', av:'#1d4ed8', ac:'#bfdbfe' }],
+    pickleball:   [{ n:'Jack F.',   pts:920,  dist:'0.7km', av:'#9a3412', ac:'#fed7aa' },
+                   { n:'Liam T.',   pts:680,  dist:'1.0km', av:'#065f46', ac:'#a7f3d0' }],
   },
   girls: {
-    basketball:   [{ n:'Sara R.',   pts:2810, dist:'0.6km', av:'#7c3aed', ac:'#ddd6fe', king:true },
-                   { n:'Pia S.',    pts:740,  dist:'0.8km', av:'#be185d', ac:'#fbcfe8' }],
-    tennis:       [{ n:'Lea V.',    pts:1200, dist:'0.4km', av:'#be185d', ac:'#fbcfe8' },
-                   { n:'Nina T.',   pts:900,  dist:'0.9km', av:'#6d28d9', ac:'#ddd6fe' }],
-    badminton:    [{ n:'Nina T.',   pts:650,  dist:'0.5km', av:'#6d28d9', ac:'#ddd6fe' },
-                   { n:'Pia S.',    pts:440,  dist:'1.2km', av:'#be185d', ac:'#fbcfe8' }],
-    tabletennis:  [{ n:'Pia S.',    pts:740,  dist:'0.3km', av:'#be185d', ac:'#fbcfe8' },
-                   { n:'Lea V.',    pts:510,  dist:'0.8km', av:'#7c3aed', ac:'#ddd6fe' }],
-    pickleball:   [{ n:'Sara R.',   pts:880,  dist:'0.5km', av:'#7c3aed', ac:'#ddd6fe' },
-                   { n:'Nina T.',   pts:620,  dist:'1.1km', av:'#6d28d9', ac:'#ddd6fe' }],
+    basketball:   [{ n:'Zoe C.',    pts:2810, dist:'0.6km', av:'#7c3aed', ac:'#ddd6fe', king:true },
+                   { n:'Mia S.',    pts:740,  dist:'0.8km', av:'#be185d', ac:'#fbcfe8' }],
+    tennis:       [{ n:'Olivia H.', pts:1200, dist:'0.4km', av:'#be185d', ac:'#fbcfe8' },
+                   { n:'Ava W.',    pts:900,  dist:'0.9km', av:'#6d28d9', ac:'#ddd6fe' }],
+    badminton:    [{ n:'Chloe B.',  pts:650,  dist:'0.5km', av:'#6d28d9', ac:'#ddd6fe' },
+                   { n:'Ella M.',   pts:440,  dist:'1.2km', av:'#be185d', ac:'#fbcfe8' }],
+    tabletennis:  [{ n:'Mia S.',    pts:740,  dist:'0.3km', av:'#be185d', ac:'#fbcfe8' },
+                   { n:'Olivia H.', pts:510,  dist:'0.8km', av:'#7c3aed', ac:'#ddd6fe' }],
+    pickleball:   [{ n:'Zoe C.',    pts:880,  dist:'0.5km', av:'#7c3aed', ac:'#ddd6fe' },
+                   { n:'Chloe B.',  pts:620,  dist:'1.1km', av:'#6d28d9', ac:'#ddd6fe' }],
   }
 };
 
@@ -61,7 +61,7 @@ function switchGender(el, gender) {
   renderPlayers();
   renderLeaderboard();
   document.getElementById('boardGym').textContent =
-    (gender === 'boys' ? 'Boys' : 'Girls') + ' · Planet Fitness BGC';
+    (gender === 'boys' ? 'Boys' : 'Girls') + ' · Fitness First Sydney';
 }
 
 // ── SPORT FILTER ───────────────────────────────────────
