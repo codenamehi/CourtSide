@@ -100,7 +100,7 @@
       <div class="side-board">
         <div class="side-header">
           <div class="side-title" id="boardTitle">🏀 Basketball</div>
-          <div class="side-gym" id="boardGym">Boys · Planet Fitness BGC</div>
+          <div class="side-gym" id="boardGym">Boys · Fitness First Sydney</div>
         </div>
         <div id="leaderboardRows"></div>
       </div>
@@ -193,20 +193,65 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">First Name</label>
-          <input class="form-input" type="text" placeholder="Juan" id="regFirst"/>
+          <input class="form-input" type="text" placeholder="e.g. Liam" id="regFirst"/>
         </div>
         <div class="form-group">
           <label class="form-label">Last Name</label>
-          <input class="form-input" type="text" placeholder="Dela Cruz" id="regLast"/>
+          <input class="form-input" type="text" placeholder="e.g. Thompson" id="regLast"/>
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" placeholder="juan@email.com" id="regEmail"/>
+        <input class="form-input" type="email" placeholder="e.g. liam@gmail.com" id="regEmail"/>
       </div>
       <div class="form-group">
         <label class="form-label">City / Area</label>
-        <input class="form-input" type="text" placeholder="Quezon City, BGC, Makati..." id="regCity"/>
+        <select class="form-input form-select" id="regCity">
+          <option value="" disabled selected>Select your city...</option>
+          <optgroup label="New South Wales">
+            <option>Sydney CBD</option>
+            <option>Parramatta</option>
+            <option>Blacktown</option>
+            <option>Penrith</option>
+            <option>Liverpool</option>
+            <option>Campbelltown</option>
+            <option>Newcastle</option>
+            <option>Wollongong</option>
+          </optgroup>
+          <optgroup label="Victoria">
+            <option>Melbourne CBD</option>
+            <option>Footscray</option>
+            <option>Dandenong</option>
+            <option>Frankston</option>
+            <option>Sunshine</option>
+            <option>Geelong</option>
+          </optgroup>
+          <optgroup label="Queensland">
+            <option>Brisbane CBD</option>
+            <option>Logan</option>
+            <option>Ipswich</option>
+            <option>Gold Coast</option>
+            <option>Cairns</option>
+            <option>Townsville</option>
+          </optgroup>
+          <optgroup label="Western Australia">
+            <option>Perth CBD</option>
+            <option>Fremantle</option>
+            <option>Rockingham</option>
+            <option>Mandurah</option>
+          </optgroup>
+          <optgroup label="South Australia">
+            <option>Adelaide CBD</option>
+            <option>Elizabeth</option>
+            <option>Salisbury</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option>Canberra</option>
+            <option>Darwin</option>
+            <option>Hobart</option>
+            <option>Other (not listed)</option>
+          </optgroup>
+        </select>
       </div>
       <div class="form-group">
         <label class="form-label">I am playing as</label>
